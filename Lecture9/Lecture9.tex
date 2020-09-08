@@ -157,7 +157,7 @@
 
 \begin{document}
 
-\title[Lecture 8]{Lecture 8: \\ Estimation Methods \\  Bayesian Estimation \& Empirical Bayes}
+\title[Lecture 9]{Lecture 9: Bayesian Estimation \& Empirical Bayes}
 \subtitle{Big Data and Machine Learning for Applied Economics \\ Econ 4676}
 \date{\today}
 
@@ -174,18 +174,21 @@
 
 %----------------------------------------------------------------------%
 \begin{frame}
-\frametitle{Announcement \& Recap}
+\frametitle{Announcement }
 
 
 \begin{itemize} 
-    \item {\bf Next Thursday September 10, Jacob will be teaching a complementary class} 
+    \item {\bf Next Thursday September 10, I'll be teaching the class} 
     \bigskip
-    \item Maximum Likelihood Estimation
+    \item {\bf Problem Set 1 is due next Tuesday September 15 at 11:00} 
     \bigskip
-    \item Conditional Maximum Likelihood Estimation
+    \item At some point over the weekend I'll send what points everyone should present
     \bigskip
-    \item Bayesian Estimation
-  
+    \item Assignment would be based on the groups created on \texttt{Github}
+    \bigskip
+    \item  You should consider class presentations as mini-seminars, just 2-5 minutes using one or two transparencies
+    \bigskip
+    \item  Attempt to make a concise interpretation of the relevant material, making effective use of supporting numerical and graphical evidence.    
 \end{itemize}
 \end{frame}
 
@@ -199,35 +202,12 @@
 
 \end{frame}
 
-
-
-%----------------------------------------------------------------------%
-\section{Motivation \& Extended Recap.}
-%----------------------------------------------------------------------%
-
-
-\begin{frame}[fragile]
-\frametitle{Motivation \& Extended Recap.}
-\framesubtitle{Bayesian Estimation}
-
-\begin{itemize}
-\item The Bayesian approach to stats is fundamentally different from the classical approach we have been taking
-\medskip
-\item In the classical approach, the parameter $\theta$ is thought to be an unknown, but fixed quantity, e.g., $X_i\sim f(\theta)$
-\medskip
-\item In the Bayesian approach $\theta$ is considered to be a quantity whose variation can be described by a probability distribution  ({\it prior distribution})
-\medskip
-\item Then a sample is taken from a population indexed by $\theta$ and the prior is updated with this sample
-\medskip
-\item The resulting updated prior is the {\it posterior distribution}
-\end{itemize}
-
-
-\end{frame}
+%----------------------------------------------------------------------% 
+\section{Bayes Theorem}
 %----------------------------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Recap: Bayes Theorem}
-For this updating we use {\it Bayes Theorem}
+\frametitle{Bayes Theorem}
+
 
 \bigskip
 \begin{align}
@@ -241,281 +221,190 @@ with $m(X)$ is the marginal distribution of $X$, i.e.
 m(X)=\int f(X|\theta)p(\theta)d\theta
 \end{align}
 
-\end{frame}
-%----------------------------------------------------------------------%
-\begin{frame}[fragile]
-\frametitle{Recap: Bayesian Linear Regression}
-
-Consider
-
-\begin{align}
-y_i= \beta x_i+u_i\,\,\,u_i \sim_{iid} N(0,\sigma^2I)
-\end{align}
-
-with prior
-
-\begin{align}
-p(\beta)=\frac{1}{\sqrt{2\pi\tau^2}}e^{-\frac{1}{2\tau^2}{(\beta-\beta_0)^2}}
-\end{align}
-
-The Posterior distribution then  $\beta\sim N(m,V)$ 
-
+It is important to note that Bayes' theorem  does not tell us what our beliefs should be, it tells us how they should change after seeing new information.
 \end{frame}
 
-
+%----------------------------------------------------------------------% 
+\section{A Simple Covid Example}
 %----------------------------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Recap: Bayesian Linear Regression }
-
-\begin{align}
-m=\left(\frac{\frac{\sum x_i^2}{\sigma^2}}{\frac{\sum x_i^2}{\sigma^2}+\frac{1}{\tau^2}}\right)\frac{\sum x_iy_i}{\sum x_i^2} + \left(\frac{\frac{1}{\tau^2}}{\frac{\sum x_i^2}{\sigma^2}+\frac{1}{\tau^2}}\right)\beta_0
-\end{align}
-
-\medskip
-
-\begin{align}
-m = \omega \hat \beta_{MLE} + (1-\omega) \beta_0
-\end{align}
-
-Remarks 
-
+\frametitle{A Simple Covid Example}
 \begin{itemize}
-  \item If prior belief is strong $\tau \downarrow 0 \rightarrow \omega \downarrow 0 \implies m=\beta_0$ 
-  \item If prior belief is weak $\tau \uparrow \infty \rightarrow \omega \uparrow 1 \implies m=\beta_{MLE}$ 
-
+\item Suppose we are interested in the prevalence of COVID in a small city. The higher the prevalence, the more public health precautions we would recommend be put into place. 
+\medskip
+\item A small random sample of 20 individuals from the city will be checked for the presence of the virus.
+\medskip
+\item Interest is in $\theta$, the fraction of infected individuals in the city. Roughly speaking, the parameter space includes all numbers between zero and one. The data $X$ records the total number of people in the sample who are infected.
+\medskip
+\item Before the sample is obtained the number of infected individuals in the sample is unknown.
 \end{itemize}
-
 
 
 \end{frame}
 
 %----------------------------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Bayesian Estimation}
-{\bf Conjugate Priors:}
+\frametitle{A Simple Covid Example}
 
-{\bf Definition}
-Let $\mathcal{F}$ denote the class of densities $f(x|\theta)$. A class $\mathcal{C}$ of prior distributions is a conjugate family for $\mathcal{F}$ if the posterior distribution is in the class $\mathcal{C}$ for all $f\in\mathcal{F}$, all priors in $\mathcal{C}$, and all $x\in X$
+ If the value of $\theta$ were known, a reasonable sampling model would be
+ \begin{align}
+ X|\theta \sim Binomial(20,\theta)
+ \end{align}
 
-\medskip
+ \begin{figure}[H] \centering
+  \centering
+  \includegraphics[scale=0.25]{figures/fig_1}
+  \\
+  \tiny 
+\end{figure}
 
-For example:
+\tiny
+ \begin{align}
+ Pr(X=x)= \binom{n}{x}\theta^x(1-\theta)^{n-x} \\
+ Pr(X=0)= \binom{20}{0}0.05^0(1-0.05)^{20-0} \approx 0.36
+ \end{align}
+
+\end{frame}
+
+%----------------------------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{A Simple Covid Example}
+\framesubtitle{Prior distribution}
 
 \begin{itemize}
-  \item the normal distribution is a conjugate for the normal family
-  \item the beta distribution for the binomial family
-  \item the gamma distribution for the poisson family
+\item Other studies from various parts of the country indicate that the infection rate in comparable cities ranges from about 0.05 to 0.20, with an average prevalence of 0.10.
+\item We will therefore use a prior distribution $p(\theta)$ 
 \end{itemize}
 
-\medskip
-Good and bad news:
-\begin{itemize}
-\item Nice because gives us a nice close form for the posterior. However, whether a conjugate family is a reasonable choice is left to you!
-\item Downside, if we choose another families, then these results are no longer available. Then we have to use sampling-based methods (MCMC, Gibbs Sampler, etc)
-\end{itemize}
+
+\begin{align}
+\theta \sim Beta(a,b)
+\end{align}
+where the density of a Beta takes the form of
+
+\begin{align}
+p(\theta)=\frac{\Gamma\left(a+b\right)}{\Gamma\left(a\right)\Gamma\left(b\right)}\theta^{a-1}\left(1-\theta\right)^{b-1}
+\end{align}
+with $a=2$ and $b=20$. Note that 
+
+\begin{align}
+E(\theta) =\frac{a}{a+b} =0.09 \\
+Pr(0.05 < \theta < 0.20) = 0.66
+\end{align}
+
+\end{frame}
+%----------------------------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{A Simple Covid Example}
+\framesubtitle{Posterior distribution}
+
+\begin{align}
+\pi(\theta|X) &= \frac{f(X|\theta)p(\theta)}{m(X)} 
+\end{align}
+
+
+\begin{align}
+\pi(\theta|X) &=  \binom{n}{x}\theta^x(1-\theta)^{n-x} \times\frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)}\theta^{a-1}(1-\theta)^{b-1}  \frac{1}{m(x)}
+\end{align}
+
+The marginal
+
+\begin{align}
+m(x) &= \int f(X|\theta)p(\theta)d\theta \\
+ &= \int_0^1 \binom{n}{x}\theta^x(1-\theta)^{n-x} \times\frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)}\theta^{a-1}(1-\theta)^{b-1}  d\theta \\
+ &= \binom{n}{x} \frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)} \int_0^1 \theta^{x+a-1}(1-\theta)^{n-x+b-1}  d\theta 
+\end{align}
+
+\end{frame}
+%----------------------------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{A Simple Covid Example}
+\framesubtitle{Posterior distribution}
+The marginal (cont)
+
+\begin{scriptsize}
+\begin{align}
+%m(x) &= \int f(X|\theta)p(\theta)d\theta \\
+ %&= \int_0^1 \binom{n}{x}\theta^x(1-\theta)^{n-x} \times\frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)}\theta^{a-1}(1-\theta)^{b-1}  d\theta \\
+ %&= \binom{n}{x} \frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)} \int_0^1 \theta^{x+a-1}(1-\theta)^{n-x+b-1}  d\theta \\
+ m(x) &= \binom{n}{x} \frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)}  \frac{\Gamma(a+x)\Gamma(b+n-x)}{\Gamma(a+b+n)} \int_0^1  \frac{\Gamma(a+b+n)}{\Gamma(a+x)\Gamma(b+n-x)} \theta^{x+a-1}(1-\theta)^{n-x+b-1}  d\theta \\
+ &= \binom{n}{x} \frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)}  \frac{\Gamma(a+x)\Gamma(b+n-x)}{\Gamma(a+b+n)}
+\end{align}
+\end{scriptsize}
+
+The posterior
+\begin{align}
+\pi(\theta|X) &=  \frac{\Gamma(a+b+n)}{\Gamma(a+x)\Gamma(b+n-x)} \theta^{x+a-1}(1-\theta)^{n-x+b-1}  \\
+              &\sim Beta(a+x,b+n-x)
+\end{align}
+
+\end{frame}
+%----------------------------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{A Simple Covid Example}
+With the posterior we can calculate then any moment of the posterior distribution. For example suppose that for our study none of the sample of individuals is infected (x=0). Then the posterior is 
+
+\begin{align}
+\pi(\theta|X=0) &\sim Beta(2,40)
+\end{align}
+
+$a= 2$, $b=20$, $n=20$. Then
+
+\begin{align}
+\tiny
+E(\theta|X=0)  &= \frac{a+x}{a+b+n} \\
+               &= \frac{n}{a+b+n} \frac{x}{n} + \frac{a+b}{a+b+n} \frac{a}{a+b}  \\
+               &= \frac{n}{a+b+n} \bar x + \frac{a+b}{a+b+n} \theta_{prior}  \\
+               &= \frac{n}{a+b+n} 0 + \frac{a+b}{a+b+n} \frac{2}{22}  \\
+ &= 0.048 
+\end{align}
+
+\end{frame}
+%----------------------------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{A Simple Covid Example}
+
+Since we have the full distribution we could calculate for example:
+\begin{align}
+mode(\theta|X) = 0.025 \\
+Pr(\theta<0.10|X=0) &= 0.93
+\end{align}
+
+\begin{figure}[H] \centering
+  \centering
+  \includegraphics[scale=0.25]{figures/fig_2}
+  \\
+  \tiny 
+\end{figure}
 
 
 \end{frame}
+
+%----------------------------------------------------------------------%
+\begin{frame}
+\frametitle{Bayes Theorem}
+{\bf Conjugate Priors. Basic idea:}
+
+\bigskip
+\begin{itemize}
+  \item $X\sim D(\theta)$ and $\theta \sim P(\lambda)$ $\rightarrow$ $\theta|X \sim P(\lambda')$
+  \bigskip
+  \item  $X\sim Bernoulli(\theta)$ and $\theta \sim Beta(a,b)$ $\rightarrow$ $\theta|X \sim Beta(a',b')$
+  \bigskip
+  \item  $X\sim N(\mu,\sigma)$ and $\theta \sim N(\mu_0,\sigma_0)$ $\rightarrow$ $\theta|X \sim N(\mu',\sigma')$
+\end{itemize}
+
+\end{frame}
+
 
 %----------------------------------------------------------------------%
 \section{Empirical Bayes}
 %----------------------------------------------------------------------%
-\begin{frame}[fragile]
-\frametitle{Empirical Bayes}
-
-
-\begin{itemize}
-  \small
-\item The constraints of slow mechanical computation molded classical statistics into a mathematically ingenious theory of sharply delimited scope. 
-\medskip
-\item After WW2, computers  allowed a more expansive and useful statistical methodology.
-\medskip
-\item However, Some revolutions start slowly. The journals of the 1950s continued to emphasize classical themes
-\medskip
-\item Change came gradually, but by the 1990s a new statistical technology, computer enabled, was firmly in place. 
-\medskip
-\item Empirical Bayes methodology, has been a particularly slow developer despite an early start in the 1940s. 
-\medskip
-\item The roadblock here was not so much the computational demands of the theory as a lack of appropriate data sets. 
-
-\end{itemize}
-\end{frame}
-
-
+\subsection{Batting Averages}
 %----------------------------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Empirical Bayes}
+\frametitle{Batting Averages}
 
-\begin{itemize}
-\item In Economics this revolution is starting to catch up, fueled by Big Data
-\end{itemize}
-
-\begin{figure}[H] \centering
-  \centering
-  \includegraphics[scale=0.4]{figures/Chetty_n_Hendren_QJE_1.png}
-  \includegraphics[scale=0.4]{figures/Chetty_n_Hendren_QJE_2.png}
-  \\
-  \tiny Chetty, R., \& Hendren, N. QJE (2018). 
-\end{figure}
-
-\end{frame}
-
-%----------------------------------------------------------------------%
-\begin{frame}[fragile]
-\frametitle{Empirical Bayes}
-
-Consider the following standard Bayesian model:
-
-\bigskip
-
-\begin{align}
-X|\theta &\sim N(\theta,1) \\
-\theta|\tau^2 &\sim N(0,\tau^2)
-\end{align}
-
-\bigskip
-\begin{itemize}
-  \item Standard approach the experimenter would specify a prior value for $\tau^2$
-  \item Note that the marginal distribution of X is $N(0,\tau^2+1)$
-  \item Empirical Bayes uses this ``shortcut''. Uses the data to obtain the ``unknown parameters''
-\end{itemize}
-
-\end{frame}
-
-%----------------------------------------------------------------------%
-\subsection{Robbins' Formula}
-%----------------------------------------------------------------------%
-\begin{frame}[fragile]
-\frametitle{Robbins' Formula}
-{\bf Example}: an insurance company is concerned about the claims each policy holder will make in the next year.
-\begin{table}[H]
-\caption{Claims data for a European automobile insurance company}
-\begin{tabular}{lcccccccc}
-Claims & 0    & 1    & 2   & 3  & 4  & 5 & 6 & 7 \\
-\hline
-Counts & 7840 & 1317 & 239 & 42 & 14 & 4 & 4 & 1 \\
-\end{tabular}
-\end{table}
-
-\end{frame}
-%----------------------------------------------------------------------%
-\begin{frame}[fragile]
-\frametitle{Robbins' Formula}
-
-\begin{itemize}
-\item It seems that we can use Bayes formula to get next years expected number of accidents
-\item We suppose that $x_k$, the number of claims to be made in a single year by policy holder $k$, 
-\item This follows a Poisson distribution with parameter $\theta_k$
-\item Recall that the mean and variance are $\theta_k$
-\end{itemize}
-
-\begin{align}
-Pr(x_k=x) = p_{\theta_k}(x)= \frac{e^{-\theta_k} \theta_k^x}{x!} \,\,\, for \,\,\, x=0,1,2,3,...
-\end{align}
-
-
-\end{frame}
-%----------------------------------------------------------------------%
-\begin{frame}[fragile]
-\frametitle{Robbins' Formula}
-
-Suppose now, that we know the prior density $g(\theta)$. Then using Bayes rule we would have
-
-\begin{align}
-E(\theta|x)&= \int_0^{\infty} \theta \pi(\theta)d\theta \\
- &=\frac{\int_0^{\infty} \theta p_{\theta_k}(x) g(\theta) d\theta }{\int_0^{\infty} p_{\theta_k}(x) g(\theta) d\theta}
-\end{align}
-
-is the expected value of $\theta$ of a customer observed to make $x$ claims in a sinble year. This would answer the insurance company's questions of what numbers of claims X to expect the next year from the same customer
-
-\end{frame}
-%----------------------------------------------------------------------%
-\begin{frame}[fragile]
-\frametitle{Robbins' Formula}
-What happens if we don't know the prior? Note the following:
-
-\begin{align}
-E(\theta|x)&=   \frac{\int_0^{\infty} \theta[e^{-\theta_k} \theta_k^x/x!]g(\theta)d\theta}{\int_0^{\infty} [e^{-\theta_k} \theta_k^x/x!]g(\theta)d\theta}
-\end{align}
-\medskip
-
-\begin{align}
-E(\theta|x)&=   \frac{(x+1) \int_0^{\infty} [e^{-\theta_k} \theta_k^{x+1}/(x+1)!]g(\theta)d\theta}{\int_0^{\infty} [e^{-\theta_k} \theta_k^x/x!]g(\theta)d\theta}
-\end{align}
-
-\begin{align}
-E(\theta|x)&=   \frac{(x+1) f(x+1)}{f(x)} 
-\end{align}
-
-\end{frame}
-
-
-%----------------------------------------------------------------------%
-\begin{frame}[fragile]
-\frametitle{Robbins' Formula}
-The obvious estimate of the marginal density $f(x)$/is the proportion of total counts in category $x$,
-\begin{align}
-\hat f(x)= \frac{y_x}{N}
-\end{align}
-where $N=\sum_x y_x$ 
-
-\begin{table}[H]
-\caption{Claims data for a European automobile insurance company}
-\begin{tabular}{lcccccccc}
-Claims & 0    & 1    & 2   & 3  & 4  & 5 & 6 & 7 \\
-\hline
-Counts & 7840 & 1317 & 239 & 42 & 14 & 4 & 4 & 1 \\
-Mean & .168 & .363 & .527 & 1.33 & 1.43 & 46 & 1.75 & . \\
-\end{tabular}
-\end{table}
-
-\end{frame}
-
-%----------------------------------------------------------------------%
-\subsection{Sabermetrics}
-%----------------------------------------------------------------------%
-\begin{frame}[fragile]
-\frametitle{Sabermetrics: Batting Averages}
-
-\begin{figure}[H] \centering
-  \centering
-  \includegraphics[scale=0.45]{figures/simpsons-sabermetrics.jpg}
-  \\
-  \tiny 
-\end{figure}
-\end{frame}
-
-%----------------------------------------------------------------------%
-\begin{frame}[fragile]
-\frametitle{Sabermetrics: Batting Averages}
-\begin{itemize}
-\item One of the most commonly used statistics in baseball is the batting average
-\end{itemize}
-
-\begin{align}
-\text{Batting Average} = \frac{\text{number of hits (H)}}{\text{number of at-bats (AB)}}
-\end{align}
-
-\bigskip
-Today we are going to explore two additional problems  and use EB:
-\medskip
-\begin{enumerate}
-\item You want to recruit two players:  One has achieved 4 hits in 10 chances, the other 300 hits in 1000 chances.
-\item Based on first few performances, can we predict what is going to be the season-long batting averages
-\end{enumerate}
-
-\end{frame}
-
-%----------------------------------------------------------------------%
-\begin{frame}[fragile]
-\frametitle{Sabermetrics: Recruiting}
-\begin{itemize}
-\item So you want to recruit two players: One has achieved 4 hits in 10 chances, the other 300 hits in 1000 chances.
-\medskip
-\item We know by history that most batting averages are between .210 and .360 
-\medskip
-\item How can we incorporate this info using Bayesian statistics?
-\end{itemize}
 
 We can model
 
@@ -525,15 +414,9 @@ We can model
 
 \begin{itemize}
 \item where $n$ is the times at bat and $\theta$ is the proportion of successes
+\item  We  use a conjugate prior for simplicity
 \end{itemize}
 
-\end{frame}
-
-%----------------------------------------------------------------------%
-\begin{frame}[fragile]
-\frametitle{Sabermetrics: Recruiting}
-
-And the prior? We can use a conjugate prior for simplicity. 
 
 \begin{align}
 p(\theta) \sim Beta(\alpha_0,\beta_0)
@@ -547,27 +430,11 @@ The posterior is:
 \end{frame}
 %----------------------------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Sabermetrics: Recruiting}
+\frametitle{Batting Averages}
 
-Here I'm using a "clean" version of \texttt{Batting} data from the \texttt{Lahman} package
+Using last class data:
 
-\small
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{require}\NormalTok{(}\StringTok{"dplyr"}\NormalTok{) }
-\KeywordTok{require}\NormalTok{(}\StringTok{"tidyr"}\NormalTok{) }
-\KeywordTok{require}\NormalTok{(}\StringTok{"ggplot2"}\NormalTok{) }
-\end{Highlighting}
-\end{Shaded}
-
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{career\textless{}{-}}\KeywordTok{readRDS}\NormalTok{(}\StringTok{"baseball.rds"}\NormalTok{)}
-\KeywordTok{head}\NormalTok{(career)}
-\end{Highlighting}
-\end{Shaded}
-
+\bigskip
 \begin{small}
 \begin{verbatim}
 ## # A tibble: 6 x 4
@@ -586,17 +453,14 @@ Here I'm using a "clean" version of \texttt{Batting} data from the \texttt{Lahma
 
 %----------------------------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Sabermetrics: Recruiting}
-\begin{itemize}
-  \item Who are the best?
-\end{itemize} 
-\tiny
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{tail}\NormalTok{(career }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{arrange}\NormalTok{(average))}
-\end{Highlighting}
-\end{Shaded}
+\frametitle{Batting Averages}
 
+We are using batting averages to assess who are the best and worst batters
+\begin{itemize}
+  \item Best?
+\end{itemize} 
+
+\begin{small}
 \begin{verbatim}
 ## # A tibble: 6 x 4
 ##   name             H    AB average
@@ -608,18 +472,21 @@ Here I'm using a "clean" version of \texttt{Batting} data from the \texttt{Lahma
 ## 5 Al Wright        1     1       1
 ## 6 George Yantz     1     1       1
 \end{verbatim}
+\end{small}
 
+\end{frame}
+
+%----------------------------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Batting Averages}
+
+We are using batting averages to assess who are the best and worst batters
 
 \begin{itemize}
-  \item And the worst?
+  \item Worst?
 \end{itemize}
-\tiny
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{head}\NormalTok{(career }\OperatorTok{\%\textgreater{}\%}\StringTok{ }\KeywordTok{arrange}\NormalTok{(average))}
-\end{Highlighting}
-\end{Shaded}
 
+\begin{small}
 \begin{verbatim}
 ## # A tibble: 6 x 4
 ##   name                  H    AB average
@@ -631,26 +498,38 @@ Here I'm using a "clean" version of \texttt{Batting} data from the \texttt{Lahma
 ## 5 Bill Andrus           0     9       0
 ## 6 Wyman Andrus          0     4       0
 \end{verbatim}
+\end{small}
 
 \end{frame}
 %----------------------------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Sabermetrics: Recruiting}
+\frametitle{Batting Averages}
 
-\begin{itemize}
-  \item Empirical Bayes in action
-  \item Estimate a prior from all your data
-\end{itemize}
+Question: Can we use Bayesian stats to get a better estimate?
 
+\bigskip
 \begin{align}
 X \sim Beta(\alpha_0,\beta_0)
 \end{align}
+\bigskip
+\begin{itemize}
+  \item We don't know $\alpha_0$ and $\beta_0$. We could use the fact that most batting averages are between .210 and .360. Select $\alpha_0$ and $\beta_0$ accordingly.
+  \bigskip
+  \item Or we can use Empirical Bayes: estimate these parameters from the data
+\end{itemize}
 
 
+\end{frame}
+%----------------------------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Batting Averages}
+Histogram of batting averages
 
+\bigskip
+\bigskip
 \begin{figure}[H] \centering
   \centering
-  \includegraphics[scale=0.4]{figures/average_hist.pdf}
+  \includegraphics[scale=0.6]{figures/average_hist.pdf}
   \\
   \tiny 
 \end{figure}
@@ -658,33 +537,49 @@ X \sim Beta(\alpha_0,\beta_0)
 
 
 \end{frame}
+
+
 %----------------------------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Sabermetrics: Recruiting}
+\frametitle{Batting Averages}
+Restrict our sample to those data points that are  informative (individuals that have gone at bat at least 500 times)
 
+\bigskip
+
+\begin{figure}[H] \centering
+  \centering
+  \includegraphics[scale=0.4]{figures/av_hist_w_mle.pdf}
+  \\
+  \tiny 
+\end{figure}
+
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Batting Averages}
+How we find the parameters that find the red line $\rightarrow$ MLE! We know that
+
+\begin{align}
+f(x_i|\alpha_0,\beta_0)=\frac{\Gamma(\alpha_0+\beta_0)}{\Gamma(\alpha_0)\Gamma(\beta_0)}x_i^{\alpha_0-1}\left(1-x_i\right)^{\beta_0-1}
+\end{align}
+
+The log likelihood 
+\begin{footnotesize}
+\begin{align}
+l(\alpha_0,\beta_0|X) = n . log(\frac{\Gamma(\alpha_0+\beta_0)}{\Gamma(\alpha_0)\Gamma(\beta_0)}) + \sum_{i=1}^n ((\alpha_0-1)log(x_i)+(\beta_0-1)log(1-x_i))
+\end{align}
+\end{footnotesize}
+
+
+In \texttt{R}
 \footnotesize
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# Here, we have to filter for the players we actually}
-\CommentTok{\# have a decent estimate of the average}
-\NormalTok{career\_filtered \textless{}{-}}\StringTok{ }\NormalTok{career }\OperatorTok{\%\textgreater{}\%}
-\StringTok{    }\KeywordTok{filter}\NormalTok{(AB }\OperatorTok{\textgreater{}=}\StringTok{ }\DecValTok{500}\NormalTok{)}
-
-\KeywordTok{require}\NormalTok{(}\StringTok{"stats4"}\NormalTok{)}
-\KeywordTok{require}\NormalTok{(}\StringTok{"VGAM"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{\# log{-}likelihood function}
 \NormalTok{ll \textless{}{-}}\StringTok{ }\ControlFlowTok{function}\NormalTok{(alpha, beta) \{}
-\NormalTok{x \textless{}{-}}\StringTok{ }\NormalTok{career\_filtered}\OperatorTok{$}\NormalTok{H}
-\NormalTok{total \textless{}{-}}\StringTok{ }\NormalTok{career\_filtered}\OperatorTok{$}\NormalTok{AB}
 \OperatorTok{{-}}\KeywordTok{sum}\NormalTok{(VGAM}\OperatorTok{::}\KeywordTok{dbetabinom.ab}\NormalTok{(x, total, alpha, beta, }\DataTypeTok{log =} \OtherTok{TRUE}\NormalTok{))}
 \NormalTok{\}}
-
 \CommentTok{\# maximum likelihood estimation}
 \NormalTok{m \textless{}{-}}\StringTok{ }\KeywordTok{mle}\NormalTok{(ll, }\DataTypeTok{start =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{alpha =} \DecValTok{1}\NormalTok{, }\DataTypeTok{beta =} \DecValTok{10}\NormalTok{), }
 \DataTypeTok{method =} \StringTok{"L{-}BFGS{-}B"}\NormalTok{, }\DataTypeTok{lower =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.0001}\NormalTok{, }\FloatTok{.1}\NormalTok{))}
@@ -696,8 +591,8 @@ X \sim Beta(\alpha_0,\beta_0)
 \end{frame}
 %----------------------------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Sabermetrics: Recruiting}
-
+\frametitle{Batting Averages}
+\footnotesize
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{alpha0 \textless{}{-}}\StringTok{ }\NormalTok{ab[}\DecValTok{1}\NormalTok{]}
@@ -720,31 +615,17 @@ X \sim Beta(\alpha_0,\beta_0)
 \end{frame}
 %----------------------------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Sabermetrics: Recruiting}
+\frametitle{Batting Averages}
 
-Now we can update the estimated average based on the posterior mean
+We can use the estimated average based on the posterior mean
 
 \begin{align}
 E(\theta|X)=\frac{\alpha+hits}{\alpha+\beta+N}
 \end{align}
 
-\bigskip
-
-In \texttt{R}
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{career\_eb \textless{}{-}}\StringTok{ }\NormalTok{career }\OperatorTok{\%\textgreater{}\%}
-\StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{eb\_estimate =}\NormalTok{ (H }\OperatorTok{+}\StringTok{ }\NormalTok{alpha0) }\OperatorTok{/}\StringTok{ }\NormalTok{(AB }\OperatorTok{+}\StringTok{ }\NormalTok{alpha0 }\OperatorTok{+}\StringTok{ }\NormalTok{beta0))}
-\end{Highlighting}
-\end{Shaded}
-
-\end{frame}
-%----------------------------------------------------------------------%
-\begin{frame}[fragile]
-\frametitle{Sabermetrics: Recruiting}
 
 \begin{itemize}
-  \item Now we can ask again: who are the best batters by this improved estimate?
+  \item And ask again: who are the best batters by this improved estimate?
 \end{itemize}
 
 
@@ -760,6 +641,18 @@ In \texttt{R}
 ## 5 Willie Keeler         2932  8591   0.341       0.338
 \end{verbatim}
 \end{footnotesize}
+
+\end{frame}
+%----------------------------------------------------------------------%
+\begin{frame}[fragile]
+\frametitle{Batting Averages}
+
+We can use the estimated average based on the posterior mean
+
+\begin{align}
+E(\theta|X)=\frac{\alpha+hits}{\alpha+\beta+N}
+\end{align}
+
 
 \begin{itemize}
 \item Who are the \emph{worst} batters?
@@ -780,7 +673,7 @@ In \texttt{R}
 \end{frame}
 %----------------------------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Sabermetrics: Recruiting}
+\frametitle{Batting Averages}
 
 We can see how EB changed all of the batting average estimates:
 
@@ -794,9 +687,12 @@ We can see how EB changed all of the batting average estimates:
 
 
 \end{frame}
+
+%----------------------------------------------------------------------%
+\subsection{Predicting Batting Averages}
 %----------------------------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Sabermetrics: Predicting Batting Averages}
+\frametitle{Predicting Batting Averages}
 
 \begin{itemize}
 \item Now supposed you want to know the end of season final batting average of players, after observing them their 45 first times at bat.
@@ -823,7 +719,7 @@ Player & Observed & Final \\
 \end{frame}
 %----------------------------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Sabermetrics: Predicting Batting Averages}
+\frametitle{Predicting Batting Averages}
 
 \begin{itemize}
 \item Recall that we can think each time at bat can be thought as a binomial trial, with $\theta$ the probability of success equal to the player's true batting average.
@@ -848,7 +744,7 @@ We are going to use also a normal prior
 \end{frame}
 %----------------------------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Sabermetrics: Predicting Batting Averages}
+\frametitle{Predicting Batting Averages}
 With this model the posterior mean for $\theta_i$ is $E(\theta_i|X_i)$
 
 \begin{align}
@@ -872,7 +768,7 @@ E\left[ \frac{(n-3)\sigma^2}{\sum(X_i-\bar X)^2}\right]&=\frac{\sigma^2}{\sigma^
 \end{frame}
 %----------------------------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Sabermetrics: Predicting Batting Averages}
+\frametitle{Predicting Batting Averages}
 
 The empirical Bayes estimator of $\theta_i$ is then
 \begin{footnotesize}
@@ -907,7 +803,7 @@ Player & Observed & Final & Empirical Bayes  \\
 \end{frame}
 %----------------------------------------------------------------------%
 \begin{frame}[fragile]
-\frametitle{Sabermetrics: Predicting Batting Averages}
+\frametitle{Predicting Batting Averages}
 
 \begin{figure}[H] \centering
   \centering
@@ -919,6 +815,10 @@ Player & Observed & Final & Empirical Bayes  \\
 
 
 \end{frame}
+
+
+
+%----------------------------------------------------------------------%
 %----------------------------------------------------------------------%
 \begin{frame}
 \frametitle{Review \& Next Steps}
@@ -930,16 +830,22 @@ Player & Observed & Final & Empirical Bayes  \\
     
   \bigskip  
 
-  
-  \item  {\bf Next Class:} Spatial Econometrics
-  \bigskip
-  \item Questions? Questions about software? 
-  
-  \end{itemize}
+\item  Next couple of classes we are going to focus on 
+  \begin{itemize}
+      \item Concepts underlying spatial data: points, lines, polygons, reference systems
+      \medskip
+      \item Plotting and describing spatial data
+      \medskip
+      \item Econometric models for spatial data
+\end{itemize}
 
+\bigskip  
+\item Questions? Questions about software? 
 
+\end{itemize}
 \end{frame}
 
+%----------------------------------------------------------------------%
 
 %----------------------------------------------------------------------%
 
@@ -953,22 +859,16 @@ Player & Observed & Final & Empirical Bayes  \\
   \medskip
   \item Casella, G. (1985). An introduction to empirical Bayes data analysis. The American Statistician, 39(2), 83-87.
   \medskip
-   \item Chetty, R., \& Hendren, N. (2018). The impacts of neighborhoods on intergenerational mobility II: County-level estimates. The Quarterly Journal of Economics, 133(3), 1163-1228.
-  \medskip
-  \item Efron, B., \& Hastie, T. (2016). Computer age statistical inference (Vol. 5). Cambridge University Press. Chapter 6
-  \medskip
   \item Robinson, D. (2017). Introduction to Empirical Bayes: Examples from Baseball Statistics. 2017.
-  \medskip
-  \item Gu, J., \& Koenker, R. (2017). Empirical Bayesball remixed: Empirical Bayes methods for longitudinal data. Journal of Applied Econometrics, 32(3), 575-599.
-  
-\end{itemize}
+  \end{itemize}
 
 \end{frame}
 
+
+
 %----------------------------------------------------------------------%
-
+%----------------------------------------------------------------------%
 \end{document}
-
 %----------------------------------------------------------------------%
 %----------------------------------------------------------------------%
 
