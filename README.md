@@ -38,3 +38,7 @@
 
 16. Lecture 16 \[[Slides](https://github.com/ECON-4676-UNIANDES/Lectures/blob/master/Lecture16/Lecture16.pdf)\] [[Link Recording Zoom Class](https://www.dropbox.com/sh/w7ph2i9fhny4hj0/AADu2QmKzQd0SoEDr8N2ZlJma?dl=0)\]
 
+17. Lecture 17 \[[Slides](https://github.com/ECON-4676-UNIANDES/Lectures/blob/master/Lecture17/Lecture17.pdf)\] [[Link Recording Zoom Class](https://www.dropbox.com/sh/ivt6y4xllgdqaoo/AAB8C1thVZxDMr48gDBcWI3wa?dl=0)\]
+
+18. Lecture 18 \[[Slides](https://github.com/ECON-4676-UNIANDES/Lectures/blob/master/Lecture18/Lecture18.pdf)\] [[Link Recording Zoom Class](https://www.dropbox.com/sh/lgz07p1qpytq5rw/AACfRf1oskmJGtYjapskxJVCa?dl=0)\]
+
